@@ -1,0 +1,216 @@
+# vim: filetype=sh
+
+##### PATHS / DIRS #####
+
+ZSH_CONFIG_DIR="$XDG_CONFIG_HOME/zsh"
+ZSH_CACHE_DIR="$XDG_CACHE_HOME/zsh"
+ZSH_DATA_DIR="$XDG_DATA_HOME/zsh"
+ZSH_PLUGINS_DIR="$ZSH_DATA_DIR/plugins"
+
+mkdir -p "$ZSH_CACHE_DIR" "$ZSH_DATA_DIR"
+
+
+##### PROMPT #####
+
+eval "$(starship init zsh)"
+
+
+##### TITLE #####
+
+title_path() {
+  local p=${PWD/#$HOME/'~'}
+  local -a parts trimmed
+  local part last short
+
+  parts=(${(s:/:)p})
+
+  (( ${#parts} )) || { print -r -- "/"; return }
+
+  last=$parts[-1]
+
+  for part in ${parts[1,-2]}; do
+    if [[ $part == .* ]]; then
+      if (( ${#part} > 2 )); then
+        trimmed+="${part[1,2]}…"
+      else
+        trimmed+="$part"
+      fi
+    else
+      if (( ${#part} > 1 )); then
+        trimmed+="${part[1,1]}…"
+      else
+        trimmed+="$part"
+      fi
+    fi
+  done
+
+  short=${(j:/:)trimmed}
+  [[ -n $short ]] && short+="/"
+  short+=$last
+
+  [[ $p == /* ]] && short="/$short"
+
+  print -r -- "$short"
+}
+preexec() {
+  local cmd=${1[(w)1]}
+  printf '\e]0;%s (%s)\a' "$cmd" "$(title_path)"
+}
+precmd() {
+  printf '\e]0;%s\a' "$(title_path)"
+}
+
+##### HISTORY #####
+
+HISTFILE="$ZSH_DATA_DIR/history"
+HISTSIZE=10000
+SAVEHIST=10000
+
+setopt HIST_FCNTL_LOCK           # safe concurrent writes
+setopt APPEND_HISTORY            # append instead of overwrite
+setopt INC_APPEND_HISTORY        # save immediately after each command
+setopt INC_APPEND_HISTORY_TIME   # timestamp + duration
+setopt HIST_IGNORE_SPACE         # commands starting with a space → not saved
+setopt HIST_IGNORE_DUPS          # ignore consecutive duplicates
+setopt HIST_EXPIRE_DUPS_FIRST    # evict older duplicates first
+setopt EXTENDED_HISTORY          # extended history format
+setopt HIST_VERIFY               # edit recalled history before running
+
+
+##### OPTIONS #####
+
+setopt EXTENDED_GLOB             # powerful globbing
+setopt INTERACTIVE_COMMENTS      # allow comments in interactive shell
+setopt NO_BEEP                   # no terminal bell
+
+
+##### LS_COLORS #####
+
+LSCACHED="$XDG_CACHE_HOME/ls_colors"
+if [[ ! -s "$LSCACHED" ]]; then
+  vivid generate modus-vivendi > "$LSCACHED"
+fi
+export LS_COLORS="$(<"$LSCACHED")"
+
+
+##### COMPLETIONS #####
+
+autoload -U compinit
+
+# extra completions
+fpath+=("$ZSH_PLUGINS_DIR/zsh-completions/src")
+fpath+=("$ZSH_DATA_DIR/site-functions")
+
+# init completion system with cache under XDG
+compinit -C -d "$ZSH_CACHE_DIR/zcompdump"
+
+# general completion behavior
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'   # case-insensitive
+zstyle ':completion:*' group-name ''                     # group results
+# don't show zsh's own completion menu: let fzf-tab capture it
+zstyle ':completion:*' menu no
+# descriptions format (fzf-tab friendly, no %F/%B etc.)
+zstyle ':completion:*:descriptions' format '[%d]'
+# use LS_COLORS for colorized completion lists
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# don't sort git branches when completing git checkout
+zstyle ':completion:*:git-checkout:*' sort false
+
+
+##### ALIASES #####
+
+alias l='eza -la'
+alias t='eza -la -T'
+alias open="xdg-open"
+
+
+##### VI MODE #####
+
+ZVM_SYSTEM_CLIPBOARD_ENABLED=true
+ZVM_VI_EDITOR="nvim -c 'set noconfirm noswapfile'"
+source "$ZSH_PLUGINS_DIR/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
+
+
+##### FZF #####
+
+FZF_INIT="$ZSH_CACHE_DIR/fzf.zsh"
+if [[ ! -s "$FZF_INIT" ]]; then
+  fzf --zsh > "$FZF_INIT"
+fi
+function fzf_init() {
+  source "$FZF_INIT"
+}
+zvm_after_init_commands+=(fzf_init) # source fzf after vi mode init
+
+# fzf-tab (after compinit)
+source "$ZSH_PLUGINS_DIR/fzf-tab/fzf-tab.plugin.zsh"
+
+# fzf-tab styles
+# disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+zstyle ':completion:*:descriptions' format '[%d]'
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
+zstyle ':completion:*' menu no
+# preview directory's content with eza when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+# custom fzf flags
+zstyle ':fzf-tab:*' fzf-flags --bind=tab:down,btab:up,ctrl-y:accept
+# switch group using `<` and `>`
+zstyle ':fzf-tab:*' switch-group '<' '>'
+
+
+##### AUTOSUGGESTIONS #####
+
+source "$ZSH_PLUGINS_DIR/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh"
+
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+ZSH_AUTOSUGGEST_MANUAL_REBIND=0
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#666666'
+
+_zsh_autosuggest_start
+
+
+##### AUTO PAIR #####
+
+source "$ZSH_PLUGINS_DIR/zsh-autopair/zsh-autopair.plugin.zsh"
+
+
+##### ZOXIDE #####
+
+eval "$(zoxide init zsh)"
+
+cd() {
+  [ -z "$*" ] && builtin cd && return
+  [ -d "$*" ] && builtin cd "$*" && return
+  [ "$*" = "-" ] && builtin cd "$*" && return
+  case "$*" in
+    ..) builtin cd ..; return;;
+    .)  builtin cd .; return;;
+  esac
+  z "$*" || builtin cd "$*"
+}
+
+##### HELPERS #####
+
+extract() {
+  case $1 in
+    *.tar.gz|*.tgz) tar -xzf "$1";;
+    *.tar.bz2|*.tbz2) tar -xjf "$1";;
+    *.zip) unzip "$1";;
+    *.rar) unrar x "$1";;
+    *) echo "Unknown archive format";;
+  esac
+}
+
+pskill() {
+  ps aux | grep "$1" | grep -v grep | awk '{print $2}' | xargs kill
+}
+
+##### SYNTAX HIGHLIGHTING #####
+
+source "$ZSH_PLUGINS_DIR/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"

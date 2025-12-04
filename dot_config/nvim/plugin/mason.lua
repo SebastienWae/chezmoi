@@ -1,0 +1,24 @@
+-- require("mason").setup({
+--   ensure_installed = {
+--     "markdownlint-cli2",
+--     "markdown-toc",
+--   },
+--   ui = {
+--     border = "single",
+--     icons = {
+--       package_installed = "✓",
+--       package_pending = "➜",
+--       package_uninstalled = "✗",
+--     },
+--   },
+-- })
+--
+-- require("mason-lspconfig").setup({
+--   ensure_installed = {
+--     "lua_ls",
+--     "marksman",
+--   },
+--   automatic_enable = {
+--     exclude = {},
+--   },
+-- })
