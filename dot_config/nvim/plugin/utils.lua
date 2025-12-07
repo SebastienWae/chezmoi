@@ -65,3 +65,12 @@ _G.dump = function(...)
     nowait = true,
   })
 end
+
+vim.api.nvim_create_user_command("Messages", function()
+  local scratch_buffer = vim.api.nvim_create_buf(false, true)
+  vim.bo[scratch_buffer].filetype = "vim"
+  local messages = vim.fn.execute("messages")
+  local lines = vim.split(messages, "\n")
+  vim.api.nvim_buf_set_lines(scratch_buffer, 0, -1, false, lines)
+  vim.cmd("vertical sbuffer " .. scratch_buffer)
+end, {})
