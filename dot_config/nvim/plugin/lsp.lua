@@ -27,6 +27,26 @@ for type, icon in pairs(signs) do
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "", })
 end
 
+local function set_cwd_if_needed(dir)
+
+end
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client and client.config and client.config.root_dir then
+      local dir = client.config.root_dir
+      if not dir or vim.fn.isdirectory(dir) ~= 1 then
+        return
+      end
+      local current = vim.fn.getcwd()
+      if vim.fn.fnamemodify(current, ":p") ~= vim.fn.fnamemodify(dir, ":p") then
+        vim.cmd("lcd " .. vim.fn.fnameescape(dir))
+      end
+    end
+  end,
+})
+
 -- keymaps
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("UserLspConfig", {}),
