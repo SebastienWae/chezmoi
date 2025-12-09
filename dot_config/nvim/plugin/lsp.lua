@@ -3,6 +3,8 @@ local map = vim.keymap.set
 vim.lsp.enable({
   "lua_ls",
   "marksman",
+  "vtsls",
+  "biome",
 })
 
 vim.lsp.config("*", {
@@ -25,10 +27,6 @@ local signs = { Error = " ", Warn = " ", Hint = " ", Info = " ", }
 for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "", })
-end
-
-local function set_cwd_if_needed(dir)
-
 end
 
 vim.api.nvim_create_autocmd("LspAttach", {

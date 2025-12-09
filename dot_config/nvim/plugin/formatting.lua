@@ -3,7 +3,15 @@ local map = vim.keymap.set
 local conform = require("conform")
 conform.setup({
   formatters_by_ft = {
-    ["markdown"] = { "markdownlint-cli2", },
+    markdown = { "markdownlint-cli2", },
+    javascript = { "biome", "biome-organize-imports", },
+    typescript = { "biome", "biome-organize-imports", },
+    javascriptreact = { "biome", "biome-organize-imports", },
+    typescriptreact = { "biome", "biome-organize-imports", },
+    json = { "biome", },
+    html = { "biome", },
+    css = { "biome", },
+    graphql = { "biome", },
   },
   formatters = {
     ["markdownlint-cli2"] = {
