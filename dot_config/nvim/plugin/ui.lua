@@ -64,3 +64,21 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 map("n", "<leader>fd", "<CMD>Oil<CR>", { desc = "Open parent directory", })
+
+-- title
+vim.opt.title = true
+function _G.get_project_name()
+  local clients = vim.lsp.get_clients({ bufnr = 0, })
+  for _, client in pairs(clients) do
+    if client.config.root_dir then
+      return vim.fn.fnamemodify(client.config.root_dir, ":t")
+    end
+  end
+  return vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
+end
+
+vim.api.nvim_create_autocmd({ "BufEnter", "DirChanged", "LspAttach", }, {
+  callback = function()
+    vim.opt.titlestring = "nvim - %{v:lua.get_project_name()} - %t"
+  end,
+})
