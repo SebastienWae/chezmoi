@@ -73,20 +73,26 @@ require("mini.hipatterns").setup({
   },
 })
 
-local flash = require("flash")
-map({ "n", "x", "o", }, "f",     flash.jump,              { desc = "Flash", })
-map("o",                "F",     flash.remote,            { desc = "Remote Flash", })
-map({ "x", "o", },      "R",     flash.treesitter_search, { desc = "Treesitter Search", })
-map("c",                "<C-f>", flash.toggle,            { desc = "Toggle Flash Search", })
--- Simulate nvim-treesitter incremental selection
-map({ "n", "o", "x", }, "<C-space>", function()
-  flash.treesitter({
-    actions = {
-      ["<c-space>"] = "next",
-      ["<BS>"] = "prev",
-    },
-  })
-end, { desc = "Treesitter Incremental Selection", })
+-- local flash = require("flash")
+-- flash.setup({
+--   modes = {
+--     char = {
+--       enabled = true,
+--       jump_labels = true,
+--       multi_line = false,
+--     },
+--   },
+-- })
+-- map({ "n", "x", "o", }, "z", flash.jump,   { desc = "Flash", })
+-- map("o",                "Z", flash.remote, { desc = "Remote Flash", })
+-- map({ "n", "o", "x", }, "<C-space>", function()
+--   flash.treesitter({
+--     actions = {
+--       ["<c-space>"] = "next",
+--       ["<BS>"] = "prev",
+--     },
+--   })
+-- end, { desc = "Treesitter Incremental Selection", })
 
 require("gitsigns").setup()
 
@@ -105,6 +111,6 @@ require("render-markdown").setup({
     icons = {},
   },
   checkbox = {
-    enabled = false,
+    enabled = true,
   },
 })
