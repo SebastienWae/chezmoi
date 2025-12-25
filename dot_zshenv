@@ -2,7 +2,7 @@
 : "${XDG_DATA_HOME:=$HOME/.local/share}"
 : "${XDG_CACHE_HOME:=$HOME/.cache}"
 
-export PATH="$PATH:$HOME/.local/bin"
+export PATH="$PATH:$HOME/.local/bin:$HOME/.bun/bin"
 
 export EDITOR='nvim'
 export PAGER="nvimpager -- -c 'lua nvimpager.maps = false'"
