@@ -104,6 +104,9 @@ fpath+=("$ZSH_DATA_DIR/site-functions")
 # init completion system with cache under XDG
 compinit -C -d "$ZSH_CACHE_DIR/zcompdump"
 
+# bun completion
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
 # general completion behavior
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'   # case-insensitive
 zstyle ':completion:*' group-name ''                     # group results
