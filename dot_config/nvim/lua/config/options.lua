@@ -1,40 +1,67 @@
----@diagnostic disable: undefined-global
+local g   = vim.g
+local o   = vim.o
 local opt = vim.opt
 
-opt.autowrite = true
-opt.confirm = true
-
-opt.number = true
+-- UI
+opt.number         = true
 opt.relativenumber = true
-opt.signcolumn = "yes"
-opt.cursorline = true
-opt.scrolloff = 4
+opt.cursorline     = true
+opt.signcolumn     = "yes"
+opt.showmode       = false
+opt.laststatus     = 2
+opt.scrolloff      = 8
+opt.sidescrolloff  = 8
+opt.pumheight      = 10
 
-opt.mouse = "a"
-opt.showmode = false
+-- Editing
+opt.expandtab   = true
+opt.shiftwidth  = 2
+opt.tabstop     = 2
+opt.smartindent = true
+opt.shiftround  = true
+opt.breakindent = true
 
--- LazyVim behavior: avoid clipboard over SSH (OSC52 etc.)
-opt.clipboard = vim.env.SSH_CONNECTION and "" or "unnamedplus"
+-- Wrapping
+opt.linebreak = true
 
-opt.undofile = true
-
+-- Search
 opt.ignorecase = true
-opt.smartcase = true
+opt.smartcase  = true
+opt.inccommand = "split"
+opt.grepprg    = "rg --vimgrep"
+opt.grepformat = "%f:%l:%c:%m"
 
+-- Splits
 opt.splitright = true
 opt.splitbelow = true
+opt.splitkeep  = "screen"
 
-opt.timeoutlen = 300
-opt.updatetime = 250
+-- System
+opt.mouse      = "a"
+opt.undofile   = true
+opt.undolevels = 10000
+opt.updatetime = 200
+opt.timeoutlen = 500
+opt.confirm    = true
+opt.autowrite  = true
 
-opt.list = true
-opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+-- clipboard
+vim.schedule(function()
+  opt.clipboard = vim.env.SSH_CONNECTION and "" or "unnamedplus"
+end)
 
-opt.inccommand = "split"
-opt.completeopt = "menu,menuone,noselect"
-opt.termguicolors = true
+-- whitespace display
+opt.list      = true
+opt.listchars = { tab = "» ", trail = "·", nbsp = "␣", }
 
-if vim.fn.executable("rg") == 1 then
-  opt.grepprg = "rg --vimgrep"
-  opt.grepformat = "%f:%l:%c:%m"
-end
+-- folding
+o.foldmethod = "expr"
+o.foldexpr   = "v:lua.vim.treesitter.foldexpr()"
+o.foldlevel  = 99
+
+-- misc
+opt.virtualedit  = "block"
+opt.smoothscroll = true
+g.health         = { style = "vsplit", }
+opt.shortmess:append({ W = true, I = true, c = true, C = true, S = true, })
+opt.exrc = true

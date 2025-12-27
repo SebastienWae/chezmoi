@@ -1,4 +1,3 @@
----@diagnostic disable: undefined-global
 return {
   {
     "miikanissi/modus-themes.nvim",
