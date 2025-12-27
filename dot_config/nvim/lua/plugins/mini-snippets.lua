@@ -1,6 +1,5 @@
 return {
   {
-    -- https://nvim-mini.org/mini.nvim/readmes/mini-snippets.html
     "echasnovski/mini.snippets",
     event = "InsertEnter",
     opts = {},
@@ -8,12 +7,6 @@ return {
       require("mini.snippets").setup(opts)
       local MiniSnippets = _G.MiniSnippets
 
-      -- By default, a snippet session stops on Normal-mode exit only if the
-      -- cursor is at the final tabstop ($0). If you leave Insert mode early,
-      -- tabstop highlighting/virtualtext can stick around.
-      --
-      -- This mirrors the upstream recipe: stop all active (including nested)
-      -- sessions whenever we go back to Normal mode.
       vim.api.nvim_create_autocmd("User", {
         pattern = "MiniSnippetsSessionStart",
         callback = function()

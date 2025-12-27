@@ -1,6 +1,5 @@
 return {
   {
-    -- https://nvim-mini.org/mini.nvim/readmes/mini-icons.html
     "echasnovski/mini.icons",
     event = "VeryLazy",
     opts = {},

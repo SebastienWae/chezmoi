@@ -65,3 +65,4 @@ opt.smoothscroll = true
 g.health         = { style = "vsplit", }
 opt.shortmess:append({ W = true, I = true, c = true, C = true, S = true, })
 opt.exrc = true
+o.winborder = "single"

@@ -1,13 +1,23 @@
 return {
   {
+    "benomahony/oil-git.nvim",
+    ft = { "oil", },
+    dependencies = { "stevearc/oil.nvim", },
+    opts = {},
+    config = function(_, opts)
+      require("oil-git").setup(opts)
+    end,
+  },
+  {
     "stevearc/oil.nvim",
     cmd = { "Oil", },
+    lazy = false,
+    dependencies = { "folke/snacks.nvim", },
     keys = {
       { "<leader>e", "<cmd>Oil<cr>",         desc = "Oil: open file explorer", },
       { "<leader>E", "<cmd>Oil --float<cr>", desc = "Oil: open floating", },
     },
     init = function()
-      -- Recommended by oil.nvim to avoid netrw conflicts.
       vim.g.loaded_netrw = 1
       vim.g.loaded_netrwPlugin = 1
     end,
@@ -37,5 +47,16 @@ return {
         border = "single",
       },
     },
+    config = function(_, opts)
+      require("oil").setup(opts)
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "OilActionsPost",
+        callback = function(event)
+          if event.data.actions[1].type == "move" then
+            Snacks.rename.on_rename_file(event.data.actions[1].src_url, event.data.actions[1].dest_url)
+          end
+        end,
+      })
+    end,
   },
 }

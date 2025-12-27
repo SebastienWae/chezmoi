@@ -8,20 +8,46 @@ return {
       "rafamadriz/friendly-snippets",
     },
     opts = {
-      snippets = { preset = "mini_snippets" },
+      snippets = { preset = "mini_snippets", },
       keymap = {
         preset = "enter",
-        ["<CR>"] = { "select_and_accept", "fallback" },
-        ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
-        ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
+        ["<CR>"] = { "select_and_accept", "fallback", },
+        ["<Tab>"] = { "select_next", "snippet_forward", "fallback", },
+        ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback", },
       },
       completion = {
-        documentation = { auto_show = false },
+        accept = {
+          auto_brackets = {
+            enabled = true,
+          },
+        },
+        menu = {
+          draw = {
+            treesitter = { "lsp", },
+          },
+        },
+        ghost_text = {
+          enabled = true,
+        },
+      },
+      cmdline = {
+        completion = {
+          menu = { auto_show = true, },
+          list = {
+            selection = {
+              preselect = false,
+              auto_insert = false,
+            },
+          },
+        },
+      },
+      signature = {
+        enabled = true,
       },
       sources = {
-        default = { "lsp", "path", "snippets", "buffer" },
+        default = { "lsp", "path", "snippets", "buffer", },
         per_filetype = {
-          lua = { inherit_defaults = true, "lazydev" },
+          lua = { inherit_defaults = true, "lazydev", },
         },
         providers = {
           lazydev = {
@@ -38,8 +64,8 @@ return {
           },
         },
       },
-      fuzzy = { implementation = "prefer_rust_with_warning" },
+      fuzzy = { implementation = "prefer_rust_with_warning", },
     },
-    opts_extend = { "sources.default" },
+    opts_extend = { "sources.default", },
   },
 }

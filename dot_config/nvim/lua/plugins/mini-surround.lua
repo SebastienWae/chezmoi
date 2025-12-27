@@ -1,6 +1,5 @@
 return {
   {
-    -- https://nvim-mini.org/mini.nvim/readmes/mini-surround.html
     "echasnovski/mini.surround",
     event = "VeryLazy",
     opts = {},
