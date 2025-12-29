@@ -44,6 +44,7 @@ opt.updatetime = 200
 opt.timeoutlen = 500
 opt.confirm    = true
 opt.autowrite  = true
+opt.autoread = true
 
 -- clipboard
 vim.schedule(function()
