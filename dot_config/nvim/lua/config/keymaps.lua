@@ -54,5 +54,9 @@ end, {
   lsp = { method = "textDocument/inlayHint", },
   desc = "rename",
 })
-map("n", "K",  vim.lsp.buf.hover,          { desc = "Hover", })
-map("n", "gK", vim.lsp.buf.signature_help, { desc = "Signature Help", })
+map("n", "K",  vim.lsp.buf.hover,           { desc = "Hover", })
+map("n", "gK", vim.lsp.buf.signature_help,  { desc = "Signature Help", })
+map("n", "gd", vim.lsp.buf.definition,      { desc = "Goto Definition", has = "definition", })
+map("n", "gI", vim.lsp.buf.implementation,  { desc = "Goto Implementation", })
+map("n", "gy", vim.lsp.buf.type_definition, { desc = "Goto T[y]pe Definition", })
+map("n", "gD", vim.lsp.buf.declaration,     { desc = "Goto Declaration", })
