@@ -27,6 +27,29 @@ return {
       notifier = { enabled = true, },
       picker = {
         sources = {
+          lsp_symbols = {
+            finder = "lsp_symbols",
+            format = "lsp_symbol",
+            tree = true,
+            filter = {
+              default = true,
+              lua = {
+                "Class",
+                "Constructor",
+                "Enum",
+                "Field",
+                "Function",
+                "Interface",
+                "Method",
+                "Module",
+                "Namespace",
+                -- "Package", -- remove package since luals uses it for control flow structures
+                "Property",
+                "Struct",
+                "Trait",
+              },
+            },
+          },
         },
       },
     },
@@ -47,15 +70,18 @@ return {
         desc = "Buffer: delete (force)",
       },
       -- pickers
-      { "<leader>bb", function() Snacks.picker.buffers() end,  desc = "Buffers", },
+      { "<leader>bb", function() Snacks.picker.buffers() end,               desc = "Buffers", },
 
-      { "<leader>fe", function() Snacks.explorer() end,        desc = "File Explorer", },
-      { "<leader>ff", function() Snacks.picker.files() end,    desc = "Find Files", },
+      { "<leader>fe", function() Snacks.explorer() end,                     desc = "File Explorer", },
+      { "<leader>ff", function() Snacks.picker.files() end,                 desc = "Find Files", },
 
-      { "<leader>sp", function() Snacks.picker.pickers() end,  desc = "Pickers", },
-      { "<leader>sg", function() Snacks.picker.grep() end,     desc = "Grep", },
-      { "<leader>sh", function() Snacks.picker.help() end,     desc = "Help Pages", },
-      { "<leader>sc", function() Snacks.picker.commands() end, desc = "Commands", },
+      { "<leader>sp", function() Snacks.picker.pickers() end,               desc = "Pickers", },
+      { "<leader>sg", function() Snacks.picker.grep() end,                  desc = "Grep", },
+      { "<leader>sh", function() Snacks.picker.help() end,                  desc = "Help Pages", },
+      { "<leader>sc", function() Snacks.picker.commands() end,              desc = "Commands", },
+
+      { "<leader>cs", function() Snacks.picker.lsp_symbols() end,           desc = "LSP Symbols", },
+      { "<leader>cS", function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Worspace Symbols", },
     },
     config = function(_, opts)
       require("snacks").setup(opts)
