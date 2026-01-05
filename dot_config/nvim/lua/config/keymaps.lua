@@ -1,9 +1,5 @@
 local map = Snacks.keymap.set
 
--- buffer nav
-map("n", "bp", ":bprevious<CR>", { silent = true, })
-map("n", "bn", ":bnext<CR>",     { silent = true, })
-
 -- better up/down
 map({ "n", "x", }, "j",      "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true, })
 map({ "n", "x", }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true, })
