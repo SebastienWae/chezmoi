@@ -7,7 +7,7 @@ return {
     },
     config = function()
       local servers = {
-        ty = {},
+        basedpyright = {},
         lua_ls = {},
         vtsls = {},
         biome = {},
