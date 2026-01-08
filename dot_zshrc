@@ -84,14 +84,6 @@ setopt INTERACTIVE_COMMENTS      # allow comments in interactive shell
 setopt NO_BEEP                   # no terminal bell
 
 
-##### LS_COLORS #####
-
-LSCACHED="$XDG_CACHE_HOME/ls_colors"
-if [[ ! -s "$LSCACHED" ]]; then
-  vivid generate modus-vivendi > "$LSCACHED"
-fi
-export LS_COLORS="$(<"$LSCACHED")"
-
 
 ##### COMPLETIONS #####
 
