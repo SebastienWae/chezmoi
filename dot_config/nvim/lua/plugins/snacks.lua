@@ -27,6 +27,11 @@ return {
       notifier = { enabled = true, },
       picker = {
         sources = {
+          explorer = {
+            hidden = true,
+            ignored = true,
+            follow = true,
+          },
           lsp_symbols = {
             finder = "lsp_symbols",
             format = "lsp_symbol",
@@ -43,7 +48,6 @@ return {
                 "Method",
                 "Module",
                 "Namespace",
-                -- "Package", -- remove package since luals uses it for control flow structures
                 "Property",
                 "Struct",
                 "Trait",
