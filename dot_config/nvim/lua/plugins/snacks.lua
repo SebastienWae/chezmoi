@@ -32,6 +32,9 @@ return {
             ignored = true,
             follow = true,
           },
+          files = {
+            hidden = true,
+          },
           lsp_symbols = {
             finder = "lsp_symbols",
             format = "lsp_symbol",
