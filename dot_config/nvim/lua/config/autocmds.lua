@@ -117,6 +117,22 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- Fix SQL highlighting in Python strings (restart TS highlight once per buffer)
+vim.api.nvim_create_autocmd("BufEnter", {
+  group = vim.api.nvim_create_augroup("treesitter python refresh", { clear = true, }),
+  pattern = "*.py",
+  callback = function(ev)
+    if vim.b[ev.buf].ts_sql_fixed then return end
+    vim.b[ev.buf].ts_sql_fixed = true
+    vim.schedule(function()
+      if vim.api.nvim_buf_is_valid(ev.buf) then
+        vim.treesitter.stop(ev.buf)
+        vim.treesitter.start(ev.buf, "python")
+      end
+    end)
+  end,
+})
+
 -- hide cursor on inactive buffer
 vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter", }, {
   group = vim.api.nvim_create_augroup("hide cursor enter", { clear = true, }),
