@@ -117,6 +117,7 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- start treesitter on all supported ft
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "*",
   callback = function()
@@ -142,5 +143,13 @@ vim.api.nvim_create_autocmd({ "WinLeave", "BufLeave", }, {
     if vim.bo.buftype == "" then
       vim.opt_local.cursorline = false
     end
+  end,
+})
+-- clear diagnostic on lsp restart
+vim.api.nvim_create_autocmd("LspDetach", {
+  callback = function(args)
+    local client_id = args.data.client_id
+    local buffer_handle = args.buf
+    vim.diagnostic.reset(client_id, buffer_handle)
   end,
 })
