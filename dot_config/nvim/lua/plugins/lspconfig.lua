@@ -19,6 +19,7 @@ return {
         ruff = {},
         oxfmt = {},
         oxlint = {},
+        nixd = {},
         jsonls = {
           settings = {
             json = {

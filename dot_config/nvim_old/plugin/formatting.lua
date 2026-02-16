@@ -12,6 +12,7 @@ conform.setup({
     html = { "biome", },
     css = { "biome", },
     graphql = { "biome", },
+    nix = { "nixfmt", },
   },
   formatters = {
     ["markdownlint-cli2"] = {
